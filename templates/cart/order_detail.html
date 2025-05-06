@@ -1,0 +1,153 @@
+{% extends 'base.html' %} {% block title %}Orden #{{ orden.nro_pedido }} -
+Sistema POS{% endblock %} {% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="h3">
+    <i class="fas fa-file-invoice me-2"></i>Detalle de Orden #{{
+    orden.nro_pedido }}
+  </h2>
+  <div>
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary me-2">
+      <i class="fas fa-home me-1"></i>Inicio
+    </a>
+    <a
+      href="{% url 'generate_pdf_order' orden.pedido_id %}"
+      class="btn btn-primary"
+      target="_blank"
+    >
+      <i class="fas fa-file-pdf me-1"></i>Descargar PDF
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card shadow mb-4">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Información de la Orden</h5>
+      </div>
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Número de Orden:</p>
+            <h5>{{ orden.nro_pedido }}</h5>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Fecha:</p>
+            <h5>{{ orden.fecha_pedido }}</h5>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Cliente:</p>
+            <h5>{{ orden.cliente.nombres }}</h5>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Estado:</p>
+            <h5>
+              {% if orden.estado == 1 %}
+              <span class="badge bg-warning">Pendiente</span>
+              {% elif orden.estado == 2 %}
+              <span class="badge bg-info">Procesando</span>
+              {% elif orden.estado == 3 %}
+              <span class="badge bg-success">Completada</span>
+              {% else %}
+              <span class="badge bg-danger">Cancelada</span>
+              {% endif %}
+            </h5>
+          </div>
+        </div>
+        {% if orden.notas %}
+        <div class="mb-4">
+          <p class="mb-1 text-muted">Notas:</p>
+          <p>{{ orden.notas }}</p>
+        </div>
+        {% endif %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in orden.items_orden_compra.all %}
+              <tr>
+                <td>{{ item.nro_item }}</td>
+                <td>{{ item.articulo.descripcion }}</td>
+                <td>${{ item.precio_unitario }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>${{ item.total_item }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="4" class="text-end">Total:</th>
+                <th>${{ orden.importe }}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow mb-4">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Información del Cliente</h5>
+      </div>
+      <div class="card-body">
+        <p><strong>Nombre:</strong> {{ orden.cliente.nombres }}</p>
+        <p>
+          <strong>Documento:</strong> {{
+          orden.cliente.tipo_identificacion.nombre_tipo_identificacion }} {{
+          orden.cliente.nro_documento }}
+        </p>
+        <p><strong>Email:</strong> {{ orden.cliente.correo_electronico }}</p>
+        {% if orden.cliente.direccion %}
+        <p><strong>Dirección:</strong> {{ orden.cliente.direccion }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Acciones</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a
+            href="{% url 'generate_pdf_order' orden.pedido_id %}"
+            class="btn btn-primary"
+            target="_blank"
+          >
+            <i class="fas fa-file-pdf me-2"></i>Descargar Factura
+          </a>
+          <a
+            href="mailto:?subject=Orden%20#{{ orden.nro_pedido }}&body=Detalles%20de%20tu%20orden%20#{{ orden.nro_pedido }}:%0A%0ATotal:%20${{ orden.importe }}"
+            class="btn btn-outline-secondary"
+          >
+            <i class="fas fa-envelope me-2"></i>Enviar por Email
+          </a>
+
+          {% if orden.estado == 1 %}
+          <a
+            href="{% url 'cancel_order' orden.pedido_id %}"
+            class="btn btn-outline-danger"
+            onclick="return confirm('¿Estás seguro de cancelar esta orden?')"
+          >
+            <i class="fas fa-times-circle me-2"></i>Cancelar Orden
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
