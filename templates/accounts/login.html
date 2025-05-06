@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Iniciar Sesión - Sistema POS{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-5">
+
+    <div class="text-center mb-4">
+      <img src="{% static 'img/logo.png' %}" alt="Logo Sistema POS" class="img-fluid" style="max-width: 150px;">
+      <h2 class="mt-3">Sistema POS</h2>
+      <p class="text-muted">Ingrese sus credenciales para acceder</p>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-body p-4">
+
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Nombre de usuario o contraseña incorrectos
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="id_username" class="form-label">Nombre de usuario</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-user"></i></span>
+              <input type="text"
+                     name="username"
+                     id="id_username"
+                     class="form-control"
+                     placeholder="Ingrese su usuario"
+                     required
+                     autofocus>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="id_password" class="form-label">Contraseña</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-lock"></i></span>
+              <input type="password"
+                     name="password"
+                     id="id_password"
+                     class="form-control"
+                     placeholder="Ingrese su contraseña"
+                     required>
+            </div>
+          </div>
+
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="remember-me">
+            <label class="form-check-label" for="remember-me">
+              Recordarme
+            </label>
+          </div>
+
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+            </button>
+          </div>
+
+          <input type="hidden" name="next" value="{{ next }}">
+        </form>
+
+        <div class="text-center">
+          <a href="#" class="text-decoration-none">¿Olvidó su contraseña?</a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="text-center mt-3 text-muted">
+      <small>&copy; {% now "Y" %} Sistema POS. Todos los derechos reservados.</small>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Animación simple para la tarjeta de login
+    const loginCard = document.querySelector('.card');
+    if (loginCard) {
+      loginCard.style.opacity = '0';
+      loginCard.style.transform = 'translateY(20px)';
+      loginCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+
+      setTimeout(function() {
+        loginCard.style.opacity = '1';
+        loginCard.style.transform = 'translateY(0)';
+      }, 100);
+    }
+  });
+</script>
+{% endblock %}

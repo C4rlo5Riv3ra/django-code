@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}Inicio - Sistema POS{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+         <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title text-primary">
+                    <i class="fas fa-store me-2"></i>Bienvenido al Sistema POS
+                </h2>
+                <p class="lead">Sistema integrado para gestión de ventas e inventario.</p>
+                <hr>
+                <p>Este sistema le permite administrar sus productos, ventas, usuarios y reportes de manera eficiente.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Tarjetas de estadísticas -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white shadow-sm mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Artículos</h6>
+                        <h2 class="mb-0">{{ total_articulos|default:"0" }}</h2>
+                    </div>
+                    <i class="fas fa-box fa-2x"></i>
+                </div>
+            </div>
+        <div class="card-footer bg-primary-dark d-flex justify-content-between align-items-center py-1">
+            <small>Ver detalles</small>
+            <i class="fas fa-arrow-circle-right"></i>
+        </div>
+    </div>
+</div>
+       
+<div class="col-md-3">
+    <div class="card bg-success text-white shadow-sm mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Ventas Hoy</h6>
+                    <h2 class="mb-0">{{ ventas_hoy|default:"0" }}</h2>
+                </div>
+                <i class="fas fa-shopping-cart fa-2x"></i>
+            </div>
+        </div>
+        <div class="card-footer bg-success-dark d-flex justify-content-between align-items-center py-1">
+            <small>Ver detalles</small>
+            <i class="fas fa-arrow-circle-right"></i>
+        </div>
+    </div>
+</div>
+   
+<div class="col-md-3">
+    <div class="card bg-warning text-white shadow-sm mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Usuarios</h6>
+                    <h2 class="mb-0">{{ total_usuarios|default:"0" }}</h2>
+                </div>
+                <i class="fas fa-users fa-2x"></i>
+            </div>
+        </div>
+        <div class="card-footer bg-warning-dark d-flex justify-content-between align-items-center py-1">
+            <small>Ver detalles</small>
+            <i class="fas fa-arrow-circle-right"></i>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card bg-danger text-white shadow-sm mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Bajo Stock</h6>
+                    <h2 class="mb-0">{{ bajo_stock|default:"0" }}</h2>
+                </div>
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+            </div>
+        </div>
+        <div class="card-footer bg-danger-dark d-flex justify-content-between align-items-center py-1">
+            <small>Ver detalles</small>
+            <i class="fas fa-arrow-circle-right"></i>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Widgets de accesos rápidos -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-tasks me-2"></i>Acciones Rápidas
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-primary btn-block p-3 mb-3 text-center">
+                            <i class="fas fa-shopping-cart fa-2x mb-2"></i><br>Nueva Venta
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-success btn-block p-3 mb-3 text-center">
+                            <i class="fas fa-plus-circle fa-2x mb-2"></i><br>Nuevo Artículo
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-info btn-block p-3 mb-3 text-center">
+                            <i class="fas fa-user-plus fa-2x mb-2"></i><br>Nuevo Usuario
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-warning btn-block p-3 mb-3 text-center">
+                            <i class="fas fa-chart-bar fa-2x mb-2"></i><br>Reportes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bell me-2"></i>Notificaciones
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center">
+                        <div class="bg-warning rounded-circle p-2 me-3">
+                            <i class="fas fa-exclamation-triangle text-white"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">5 productos con stock bajo</p>
+                            <small class="text-muted">Hace 3 horas</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <div class="bg-success rounded-circle p-2 me-3">
+                            <i class="fas fa-check text-white"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">Venta #1234 completada</p>
+                            <small class="text-muted">Hace 5 horas</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <div class="bg-primary rounded-circle p-2 me-3">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">Nuevo usuario registrado</p>
+                            <small class="text-muted">Ayer</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer bg-white">
+                <a href="#" class="btn btn-sm btn-outline-primary">Ver todas</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+        

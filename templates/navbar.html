@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <i class="fas fa-cash-register me-2"></i>Sistema POS
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/' %}active{%endif %}" href="{% url 'home' %}">
+                        <i class="fas fa-home me-1"></i>Inicio
+                    </a>
+                </li>           
+                <!-- Dropdown para Artículos -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="articulosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-box me-1"></i>Artículos
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="articulosDropdown">
+                        <li><a class="dropdown-item" href="#">Lista de Artículos</a></li>
+                        <li><a class="dropdown-item" href="#">Nuevo Artículo</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Grupos de Artículos</a></li>
+                        <li><a class="dropdown-item" href="#">Líneas de Artículos</a></li>
+                    </ul>
+                </li>
+                <!-- Dropdown para Usuarios -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="usuariosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-users me-1"></i>Usuarios
+                    </a>
+                    <ul class="dropdown-menu"aria-labelledby="usuariosDropdown">
+                        <li><a class="dropdown-item" href="#">Lista de Usuarios</a></li>
+                        <li><a class="dropdown-item" href="#">Nuevo Usuario</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Perfiles</a></li>
+                    </ul>
+                </li>
+            </ul>   
+                <!-- Usuario y Búsqueda -->
+            <div class="d-flex">
+                <form class="d-flex me-2">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user me-1"></i>
+                        {{user.full_name|truncatechars:15 }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i>Perfil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configuración</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <a href="#" class="btn btn-outline-light"><i class="fas fa-sign-in-alt me-1"></i>Iniciar sesión</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+   

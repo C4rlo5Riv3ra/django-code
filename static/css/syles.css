@@ -1,0 +1,112 @@
+/* Estilos personalizados para el Sistema POS */
+
+/* Variables de colores */
+:root {
+    --primary-dark: #0d47a1;
+    --success-dark: #1b5e20;
+    --warning-dark: #e65100;
+    --danger-dark: #b71c1c;
+}
+
+/* Estilo para el cuerpo de la página */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Navbar y componentes de navegación */
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    font-weight: 500;
+}
+
+/* Cards y contenedores */
+.card {
+    border-radius: 0.5rem;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Botones */
+.btn {
+    border-radius: 0.4rem;
+    font-weight: 500;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Fondos para los footers de tarjetas */
+.bg-primary-dark {
+    background-color: var(--primary-dark);
+}
+
+.bg-success-dark {
+    background-color: var(--success-dark);
+}
+
+.bg-warning-dark {
+    background-color: var(--warning-dark);
+}
+
+.bg-danger-dark {
+    background-color: var(--danger-dark);
+}
+
+/* Animación de hover para los enlaces */
+a {
+    transition: all 0.3s ease;
+}
+
+/* Estilos para tablas */
+.table {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+}
+
+/* Formularios */
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    border-color: #86b7fe;
+}
+
+/* Paginación */
+.page-item.active .page-link {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* Adaptaciones responsivas */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+}

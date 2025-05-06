@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mi Perfil - Sistema POS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="h3"><i class="fas fa-user-circle me-2"></i>Mi Perfil</h2>
+  <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+    <i class="fas fa-arrow-left me-1"></i>Volver
+  </a>
+</div>
+
+<div class="row">
+  <!-- Perfil lateral -->
+  <div class="col-md-4">
+    <div class="card shadow mb-4">
+      <div class="card-body text-center">
+        <div class="avatar-circle mb-3 mx-auto">
+          <span class="initials">{{ user.full_name|slice:":1" }}</span>
+        </div>
+        <h4>{{ user.full_name }}</h4>
+        <p class="text-muted">{{ user.perfil.perfil_nombre }}</p>
+        <hr>
+        <div class="d-grid">
+          <button class="btn btn-outline-primary">
+            <i class="fas fa-camera me-2"></i>Cambiar Foto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Acceso Rápido</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action">
+            <i class="fas fa-key me-2"></i>Cambiar Contraseña
+          </a>
+          <a href="#" class="list-group-item list-group-item-action">
+            <i class="fas fa-history me-2"></i>Historial de Actividades
+          </a>
+          <a href="#" class="list-group-item list-group-item-action">
+            <i class="fas fa-cog me-2"></i>Preferencias
+          </a>
+          <a href="#" class="list-group-item list-group-item-action text-danger">
+            <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detalles del perfil -->
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Información Personal</h5>
+        <button class="btn btn-sm btn-primary edit-profile-btn">
+          <i class="fas fa-edit me-1"></i>Editar
+        </button>
+      </div>
+      <div class="card-body">
+        <!-- Vista -->
+        <div class="view-mode">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <p class="mb-1 text-muted">Nombre Completo:</p>
+              <h5>{{ user.full_name }}</h5>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-1 text-muted">Nombre de Usuario:</p>
+              <h5>{{ user.username }}</h5>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <p class="mb-1 text-muted">Correo Electrónico:</p>
+              <h5>{{ user.email }}</h5>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-1 text-muted">Teléfono Móvil:</p>
+              <h5>{{ user.mobile }}</h5>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <p class="mb-1 text-muted">Perfil:</p>
+              <h5>{{ user.perfil.perfil_nombre }}</h5>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-1 text-muted">Último Acceso:</p>
+              <h5>{{ user.last_login|date:'d/m/Y H:i' }}</h5>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modo edición -->
+        <div class="edit-mode" style="display: none;">
+          <form method="post" action="{% url 'profile_update' %}">
+            {% csrf_token %}
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="full_name" class="form-label">Nombre Completo*</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" value="{{ user.full_name }}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="username" class="form-label">Nombre de Usuario*</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" readonly>
+                <div class="form-text">El nombre de usuario no puede ser modificado.</div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="email" class="form-label">Correo Electrónico*</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="mobile" class="form-label">Teléfono Móvil*</label>
+                <input type="tel" class="form-control" id="mobile" name="mobile" value="{{ user.mobile }}" required>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+              <button type="button" class="btn btn-outline-secondary me-2 cancel-edit-btn">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actividad reciente -->
+    <div class="card shadow mt-4">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Actividad Reciente</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-marker bg-success"></div>
+            <div class="timeline-content">
+              <h6 class="mb-0">Inicio de sesión</h6>
+              <p class="text-muted mb-0 small">Hoy, 10:45 AM</p>
+              <p>Inició sesión desde 192.168.1.24</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-marker bg-primary"></div>
+            <div class="timeline-content">
+              <h6 class="mb-0">Creación de artículo</h6>
+              <p class="text-muted mb-0 small">Ayer, 15:30 PM</p>
+              <p>Creó el artículo "Camisa Algodón Talla M"</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-marker bg-warning"></div>
+            <div class="timeline-content">
+              <h6 class="mb-0">Modificación de precios</h6>
+              <p class="text-muted mb-0 small">24/04/2025, 09:15 AM</p>
+              <p>Actualizó los precios de 5 artículos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer bg-white text-center">
+        <a href="#" class="btn btn-sm btn-outline-primary">Ver Todo el Historial</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Estilos para el avatar */
+  .avatar-circle {
+    width: 100px;
+    height: 100px;
+    background-color: #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .initials {
+    font-size: 40px;
+    color: white;
+    font-weight: bold;
+  }
+
+  /* Estilos para la línea de tiempo */
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    width: 2px;
+    background-color: #e9ecef;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    top: 5px;
+    left: -30px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .timeline-content {
+    padding-top: 3px;
+  }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const editBtn = document.querySelector('.edit-profile-btn');
+    const cancelBtn = document.querySelector('.cancel-edit-btn');
+    const viewMode = document.querySelector('.view-mode');
+    const editMode = document.querySelector('.edit-mode');
+
+    if (editBtn && cancelBtn && viewMode && editMode) {
+      editBtn.addEventListener('click', function () {
+        viewMode.style.display = 'none';
+        editMode.style.display = 'block';
+        this.style.display = 'none';
+      });
+
+      cancelBtn.addEventListener('click', function () {
+        viewMode.style.display = 'block';
+        editMode.style.display = 'none';
+        editBtn.style.display = 'inline-block';
+      });
+    }
+  });
+</script>
+{% endblock %}

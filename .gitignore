@@ -1,0 +1,49 @@
+# Entorno virtual
+env/
+venv/
+ENV/
+.env/  # Si usas dotenv para variables de entorno
+
+# Archivos de Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de bases de datos
+*.sqlite3
+
+# Archivos de logs
+*.log
+
+# Archivos de configuración del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de IDEs
+.vscode/
+.idea/
+
+# Archivos de migraciones (opcional si no quieres trackearlos al inicio)
+# **/migrations/
+# !**/migrations/__init__.py
+
+# Archivos estáticos y media
+/staticfiles/
+media/
+
+# Archivos de compilación y cachés
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Docker (si lo usas en el futuro)
+*.pid
+*.tar
+*.gz
+*.img
+*.bak
+*.swp
+
+# Archivos de entorno
+.env

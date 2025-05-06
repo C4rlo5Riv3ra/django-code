@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {% if form.instance.articulo_id %}Editar{% else %}Nuevo{% endif %} Artículo - Sistema POS
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="h3">
+    <i class="fas fa-{% if form.instance.articulo_id %}edit{% else %}plus{% endif %} me-2"></i>
+    {% if form.instance.articulo_id %}Editar{% else %}Nuevo{% endif %} Artículo
+  </h2>
+  <a href="{% url 'articulos_list' %}" class="btn btn-outline-secondary">
+    <i class="fas fa-arrow-left me-1"></i>Volver
+  </a>
+</div>
+
+<div class="card shadow">
+  <div class="card-header bg-white">
+    <h5 class="mb-0">Información del Artículo</h5>
+  </div>
+  <div class="card-body">
+    <form method="post" id="articuloForm" class="needs-validation" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+          <ul class="mb-0">
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="{{ form.codigo_articulo.id_for_label }}" class="form-label">Código de Artículo*</label>
+          <input type="text"
+                 class="form-control {% if form.codigo_articulo.errors %}is-invalid{% endif %}"
+                 id="{{ form.codigo_articulo.id_for_label }}"
+                 name="{{ form.codigo_articulo.name }}"
+                 value="{{ form.codigo_articulo.value|default:'' }}"
+                 required>
+          <div class="invalid-feedback">
+            {% for error in form.codigo_articulo.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.codigo_barras.id_for_label }}" class="form-label">Código de Barras</label>
+          <input type="text"
+                 class="form-control {% if form.codigo_barras.errors %}is-invalid{% endif %}"
+                 id="{{ form.codigo_barras.id_for_label }}"
+                 name="{{ form.codigo_barras.name }}"
+                 value="{{ form.codigo_barras.value|default:'' }}">
+          <div class="invalid-feedback">
+            {% for error in form.codigo_barras.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="{{ form.descripcion.id_for_label }}" class="form-label">Descripción*</label>
+        <input type="text"
+               class="form-control {% if form.descripcion.errors %}is-invalid{% endif %}"
+               id="{{ form.descripcion.id_for_label }}"
+               name="{{ form.descripcion.name }}"
+               value="{{ form.descripcion.value|default:'' }}"
+               required>
+        <div class="invalid-feedback">
+          {% for error in form.descripcion.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="{{ form.presentacion.id_for_label }}" class="form-label">Presentación</label>
+        <input type="text"
+               class="form-control {% if form.presentacion.errors %}is-invalid{% endif %}"
+               id="{{ form.presentacion.id_for_label }}"
+               name="{{ form.presentacion.name }}"
+               value="{{ form.presentacion.value|default:'' }}">
+        <div class="invalid-feedback">
+          {% for error in form.presentacion.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="{{ form.grupo.id_for_label }}" class="form-label">Grupo*</label>
+          <select class="form-select {% if form.grupo.errors %}is-invalid{% endif %}"
+                  id="{{ form.grupo.id_for_label }}"
+                  name="{{ form.grupo.name }}"
+                  required>
+            <option value="">Seleccione un grupo</option>
+            {% for choice in form.grupo.field.queryset %}
+              <option value="{{ choice.pk }}"
+                      {% if form.grupo.value|stringformat:"s" == choice.pk|stringformat:"s" %}selected{% endif %}>
+                {{ choice }}
+              </option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">
+            {% for error in form.grupo.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ form.linea.id_for_label }}" class="form-label">Línea*</label>
+          <select class="form-select {% if form.linea.errors %}is-invalid{% endif %}"
+                  id="{{ form.linea.id_for_label }}"
+                  name="{{ form.linea.name }}"
+                  required>
+            <option value="">Seleccione una línea</option>
+            {% for choice in form.linea.field.queryset %}
+              <option value="{{ choice.pk }}"
+                      {% if form.linea.value|stringformat:"s" == choice.pk|stringformat:"s" %}selected{% endif %}>
+                {{ choice }}
+              </option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">
+            {% for error in form.linea.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="{{ form.stock.id_for_label }}" class="form-label">Stock Inicial</label>
+        <input type="number"
+               class="form-control {% if form.stock.errors %}is-invalid{% endif %}"
+               id="{{ form.stock.id_for_label }}"
+               name="{{ form.stock.name }}"
+               value="{{ form.stock.value|default:'0' }}"
+               step="0.01">
+        <div class="invalid-feedback">
+          {% for error in form.stock.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      </div>
+
+      <hr class="my-4">
+      <h5>Precios</h5>
+
+      {% for i in "1,2,3,4"|split:"," %}
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="{{ precio_form.precio_{{ i }}.id_for_label }}" class="form-label">Precio {{ i }}{% if i == '1' %}*{% endif %}</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number"
+                     class="form-control {% if precio_form.precio_{{ i }}.errors %}is-invalid{% endif %}"
+                     id="{{ precio_form.precio_{{ i }}.id_for_label }}"
+                     name="{{ precio_form.precio_{{ i }}.name }}"
+                     value="{{ precio_form.precio_{{ i }}.value|default:'0' }}"
+                     step="0.01" {% if i == '1' %}required{% endif %}>
+              <div class="invalid-feedback">
+                {% for error in precio_form.precio_{{ i }}.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="{{ precio_form.precio_compra.id_for_label }}" class="form-label">Precio de Compra*</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="number"
+                   class="form-control {% if precio_form.precio_compra.errors %}is-invalid{% endif %}"
+                   id="{{ precio_form.precio_compra.id_for_label }}"
+                   name="{{ precio_form.precio_compra.name }}"
+                   value="{{ precio_form.precio_compra.value|default:'0' }}"
+                   step="0.01"
+                   required>
+            <div class="invalid-feedback">
+              {% for error in precio_form.precio_compra.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="{{ precio_form.precio_costo.id_for_label }}" class="form-label">Precio de Costo*</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="number"
+                   class="form-control {% if precio_form.precio_costo.errors %}is-invalid{% endif %}"
+                   id="{{ precio_form.precio_costo.id_for_label }}"
+                   name="{{ precio_form.precio_costo.name }}"
+                   value="{{ precio_form.precio_costo.value|default:'0' }}"
+                   step="0.01"
+                   required>
+            <div class="invalid-feedback">
+              {% for error in precio_form.precio_costo.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+        <button type="button" class="btn btn-outline-secondary me-md-2" onclick="history.back()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Artículo</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Validación del formulario
+    validarFormulario('articuloForm');
+
+    // Cargar líneas según el grupo seleccionado
+    const grupoSelect = document.getElementById('{{ form.grupo.id_for_label }}');
+    const lineaSelect = document.getElementById('{{ form.linea.id_for_label }}');
+
+    if (grupoSelect && lineaSelect) {
+      grupoSelect.addEventListener('change', function () {
+        const grupoId = this.value;
+        if (grupoId) {
+          // Aquí iría una petición AJAX para cargar las líneas
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}
