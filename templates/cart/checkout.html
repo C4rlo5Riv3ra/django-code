@@ -1,0 +1,140 @@
+{% extends 'base.html' %} {% block title %}Finalizar Compra - Sistema POS{%
+endblock %} {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="h3"><i class="fas fa-credit-card me-2"></i>Finalizar Compra</h2>
+  <a href="{% url 'cart_detail' %}" class="btn btn-outline-secondary">
+    <i class="fas fa-arrow-left me-1"></i>Volver al Carrito
+  </a>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <div class="card shadow mb-4">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Datos de Facturación</h5>
+      </div>
+      <div class="card-body">
+        <form method="post" id="checkoutForm">
+          {% csrf_token %}
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="nombre" class="form-label">Nombre Completo</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombre"
+                value="{{ cliente.nombres }}"
+                readonly
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              value="{{ cliente.correo_electronico }}"
+              readonly
+            />
+          </div>
+          <div class="mb-3">
+            <label for="direccion" class="form-label"
+              >Dirección de Entrega</label
+            >
+            <textarea
+              class="form-control"
+              id="direccion"
+              name="direccion"
+              rows="3"
+              required
+            >
+{{ cliente.direccion|default:'' }}</textarea
+            >
+          </div>
+          <div class="mb-3">
+            <label for="notas" class="form-label">Notas adicionales</label>
+            <textarea
+              class="form-control"
+              id="notas"
+              name="notas"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-check me-1"></i>Completar Orden
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow mb-4">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Resumen de Compra</h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          {% for item in cart %}
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">{{ item.descripcion }}</h6>
+              <small class="text-muted"
+                >{{ item.cantidad }} x ${{item.precio }}</small
+              >
+            </div>
+            <span class="text-muted">${{ item.total_precio }}</span>
+          </li>
+          {% endfor %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Total</span>
+            <strong>${{ cart.get_total_price }}</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card shadow">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Métodos de Pago</h5>
+      </div>
+      <div class="card-body">
+        <div class="form-check mb-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="paymentMethod"
+            id="efectivo"
+            checked
+          />
+          <label class="form-check-label" for="efectivo">
+            <i class="fas fa-money-bill-wave me-2"></i>Efectivo
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="paymentMethod"
+            id="tarjeta"
+          />
+          <label class="form-check-label" for="tarjeta">
+            <i class="fas fa-credit-card me-2"></i>Tarjeta de Crédito/Débito
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="paymentMethod"
+            id="transferencia"
+          />
+          <label class="form-check-label" for="transferencia">
+            <i class="fas fa-exchange-alt me-2"></i>Transferencia Bancaria
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

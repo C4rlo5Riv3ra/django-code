@@ -138,3 +138,15 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Duración de la sesión (2 semanas, en segundos) 
+SESSION_COOKIE_AGE = 1209600
+
+# Cerrar la sesión cuando el usuario cierra el navegador 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Usar cookies seguros (solo transmitir por HTTPS) 
+SESSION_COOKIE_SECURE = False  # Cambiar a True en producción con HTTPS
+
+# Motor de almacenamiento de sesiones 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db' # Almacenar en la base de datos

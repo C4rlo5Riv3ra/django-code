@@ -1,177 +1,254 @@
-{% extends 'base.html' %}
-{% block title %}{{ articulo.descripcion }} - Sistema POS{% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %}{{ articulo.descripcion }} - Sistema
+POS{% endblock %} {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="h3">
-        <i class="fas fa-box me-2"></i>Detalle de Artículo
-    </h2>
-    <div>
-        <a href="{% url 'articulos_list' %}" class="btn btn-outline-secondaryme-2">
-            <i class="fas fa-arrow-left me-1"></i>Volver
-        </a>
-        <a href="{% url 'articulo_edit' articulo.articulo_id %}" class="btn btn-warning">
-            <i class="fas fa-edit me-1"></i>Editar
-        </a>
-    </div>
+  <h2 class="h3"><i class="fas fa-box me-2"></i>Detalle de Artículo</h2>
+  <div>
+    <a href="{% url 'articulos_list' %}" class="btn btn-outline-secondaryme-2">
+      <i class="fas fa-arrow-left me-1"></i>Volver
+    </a>
+    <a
+      href="{% url 'articulo_edit' articulo.articulo_id %}"
+      class="btn btn-warning"
+    >
+      <i class="fas fa-edit me-1"></i>Editar
+    </a>
+  </div>
 </div>
 <div class="row">
-    <div class="col-md-8">
-        <div class="card shadow mb-4">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Información del Artículo</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <p class="mb-1 text-muted">Código:</p>
-                        <h5>{{ articulo.codigo_articulo }}</h5>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="mb-1 text-muted">Código de Barras:</p>
-                        <h5>{{ articulo.codigo_barras|default:"No especificado"}}</h5>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <p class="mb-1 text-muted">Descripción:</p>
-                    <h4>{{ articulo.descripcion }}</h4>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <p class="mb-1 text-muted">Presentación:</p>
-                        <h5>{{ articulo.presentacion }}</h5>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="mb-1 text-muted">Stock:</p>
-                        <h5>
-                            {% if articulo.stock < 10 %}
-                            <span class="badge bg-danger">{{ articulo.stock}}</span>
-                            {% else %}
-                            <span class="badge bg-success">{{ articulo.stock}}</span>
-                            {% endif %}
-                        </h5>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="mb-1 text-muted">Grupo:</p>
-                        <h5>{{ articulo.grupo.nombre_grupo }}</h5>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="mb-1 text-muted">Línea:</p>
-                        <h5>{{ articulo.linea.nombre_linea }}</h5>
-                    </div>
-                </div>
-            </div>
+  <div class="col-md-8">
+    <div class="card shadow mb-4">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Información del Artículo</h5>
+      </div>
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Código:</p>
+            <h5>{{ articulo.codigo_articulo }}</h5>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Código de Barras:</p>
+            <h5>{{ articulo.codigo_barras|default:"No especificado"}}</h5>
+          </div>
         </div>
+
+        <div class="mb-4">
+          <p class="mb-1 text-muted">Descripción:</p>
+          <h4>{{ articulo.descripcion }}</h4>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Presentación:</p>
+            <h5>{{ articulo.presentacion }}</h5>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Stock:</p>
+            <h5>
+              {% if articulo.stock < 10 %}
+              <span class="badge bg-danger">{{ articulo.stock}}</span>
+              {% else %}
+              <span class="badge bg-success">{{ articulo.stock}}</span>
+              {% endif %}
+            </h5>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Grupo:</p>
+            <h5>{{ articulo.grupo.nombre_grupo }}</h5>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1 text-muted">Línea:</p>
+            <h5>{{ articulo.linea.nombre_linea }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Movimientos del artículo (opcional) -->
-        <div class="card shadow">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Últimos Movimientos</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Tipo</th>
-                                <th>Cantidad</th>
-                                <th>Usuario</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Ejemplo de movimientos, en un caso real vendrían del backend -->
-                            <tr>
-                                <td>25/04/2025 15:30</td>
-                                <td><span class="badge bg-success">Entrada</span></td>
-                                <td>+10</td>
-                                <td>Admin</td>
-                            </tr>
-                            <tr>
-                                <td>24/04/2025 14:20</td>
-                                <td><span class="badge bg-danger">Salida</span></td>
-                                <td>-2</td>
-                                <td>Vendedor1</td>
-                            </tr>
-                            <tr>
-                                <td>23/04/2025 09:15</td>
-                                <td><span class="badge
-                                bg-primary">Ajuste</span></td>
-                                <td>+5</td>
-                                <td>Admin</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card shadow">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Últimos Movimientos</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Usuario</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Ejemplo de movimientos, en un caso real vendrían del backend -->
+              <tr>
+                <td>25/04/2025 15:30</td>
+                <td><span class="badge bg-success">Entrada</span></td>
+                <td>+10</td>
+                <td>Admin</td>
+              </tr>
+              <tr>
+                <td>24/04/2025 14:20</td>
+                <td><span class="badge bg-danger">Salida</span></td>
+                <td>-2</td>
+                <td>Vendedor1</td>
+              </tr>
+              <tr>
+                <td>23/04/2025 09:15</td>
+                <td><span class="badge bg-primary">Ajuste</span></td>
+                <td>+5</td>
+                <td>Admin</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <!-- Precios -->
+    <div class="card shadow mb-4">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Precios</h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span>Precio 1:</span>
+            <span class="badge bg-primary rounded-pill"
+              >${{articulo.listaprecio.precio_1 }}</span
+            >
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span>Precio 2:</span>
+            <span class="badge bg-primary rounded-pill"
+              >${{articulo.listaprecio.precio_2 }}</span
+            >
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span>Precio 3:</span>
+            <span class="badge bg-primary rounded-pill"
+              >${{articulo.listaprecio.precio_3 }}</span
+            >
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span>Precio 4:</span>
+            <span class="badge bg-primary rounded-pill"
+              >${{articulo.listaprecio.precio_4 }}</span
+            >
+          </li>
+        </ul>
+        <hr />
+        <ul class="list-group list-group-flush">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span><b>Precio de Compra:</b></span>
+            <span class="badge bg-info rounded-pill"
+              >${{articulo.listaprecio.precio_compra }}</span
+            >
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span><b>Precio de Costo:</b></span>
+            <span class="badge bg-info rounded-pill"
+              >${{articulo.listaprecio.precio_costo }}</span
+            >
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <div class="col-md-4">
-        <!-- Precios -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Precios</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Precio 1:</span>
-                        <span class="badge bg-primary rounded-pill">${{articulo.listaprecio.precio_1 }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Precio 2:</span>
-                        <span class="badge bg-primary rounded-pill">${{articulo.listaprecio.precio_2 }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Precio 3:</span>
-                        <span class="badge bg-primary rounded-pill">${{articulo.listaprecio.precio_3 }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Precio 4:</span>
-                        <span class="badge bg-primary rounded-pill">${{articulo.listaprecio.precio_4 }}</span>
-                    </li>
-                </ul>
-                <hr>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><b>Precio de Compra:</b></span>
-                        <span class="badge bg-info rounded-pill">${{articulo.listaprecio.precio_compra }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><b>Precio de Costo:</b></span>
-                        <span class="badge bg-info rounded-pill">${{articulo.listaprecio.precio_costo }}</span>
-                    </li>
-                </ul>
-            </div>
+    <!-- Acciones rápidas -->
+    <div class="card shadow">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Acciones Rápidas</h5>
+      </div>
+      <div class="card-body">
+        <form
+          action="{% url 'cart_add' articulo.articulo_id %}"
+          method="post"
+          class="mb-3"
+        >
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <span class="input-group-text">Cantidad</span>
+            <input
+              type="number"
+              name="cantidad"
+              value="1"
+              min="1"
+              class="form-control"
+            />
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-cart-plus me-1"></i>Añadir al Carrito
+            </button>
+          </div>
+        </form>
+        <div class="d-grid gap-2">
+          <button class="btn btn-success">
+            <i class="fas fa-plus-circle me-2"></i>Añadir Stock
+          </button>
+          <button class="btn btn-warning">
+            <i class="fas fa-sync-alt me-2"></i>Actualizar Precios
+          </button>
+          <button class="btn btn-info">
+            <i class="fas fa-barcode me-2"></i>Imprimir Código
+          </button>
+          <button
+            class="btn btn-danger"
+            onclick="confirmarEliminacion(event, '¿Desea eliminar este artículo?')"
+          >
+            <i class="fas fa-trash me-2"></i>Eliminar Artículo
+          </button>
         </div>
-        
-        <!-- Acciones rápidas -->
-        <div class="card shadow">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Acciones Rápidas</h5>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <button class="btn btn-success">
-                        <i class="fas fa-plus-circle me-2"></i>Añadir Stock
-                    </button>
-                    <button class="btn btn-warning">
-                        <i class="fas fa-sync-alt me-2"></i>Actualizar Precios
-                    </button>
-                    <button class="btn btn-info">
-                        <i class="fas fa-barcode me-2"></i>Imprimir Código
-                    </button>
-                    <button class="btn btn-danger" onclick="confirmarEliminacion(event, '¿Desea eliminar este artículo?')">
-                        <i class="fas fa-trash me-2"></i>Eliminar Artículo
-                    </button>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Añadir en templates/core/articulos/detail.html -->
+  {% if recent_products %}
+  <div class="card shadow mt-4">
+    <div class="card-header bg-white">
+      <h5 class="mb-0">Vistos recientemente</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        {% for product in recent_products %}
+        <div class="col-md-3 mb-2">
+          <div class="card">
+            <div class="card-body p-2">
+              <h6 class="card-title small">
+                {{ product.descripcion|truncatechars:25 }}
+              </h6>
+              <p class="card-text text-primary mb-1">
+                ${{ product.listaprecio.precio_1 }}
+              </p>
+              <a
+                href="{% url 'articulo_detail' product.articulo_id %}"
+                class="btn btn-sm btn-outline-primary"
+                >Ver</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
-       
