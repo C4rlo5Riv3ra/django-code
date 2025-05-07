@@ -37,6 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google', 
+    'allauth.socialaccount.providers.facebook', 
     'core',
     'accounts',
 ]
@@ -49,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -150,3 +158,62 @@ SESSION_COOKIE_SECURE = False  # Cambiar a True en producción con HTTPS
 
 # Motor de almacenamiento de sesiones 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db' # Almacenar en la base de datos
+
+AUTHENTICATION_BACKENDS = [ 
+    # Needed to login by username in Django admin 
+    'django.contrib.auth.backends.ModelBackend', 
+    # `allauth` specific authentication methods 
+    'allauth.account.auth_backends.AuthenticationBackend', 
+] 
+
+SITE_ID = 1 
+
+# Auth settings 
+AUTH_USER_MODEL = 'accounts.Usuario'  # Asegúrate de que está correctamente configurado 
+
+LOGIN_REDIRECT_URL = 'home' 
+
+LOGOUT_REDIRECT_URL = 'login' 
+
+# Allauth settings 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username' 
+
+ACCOUNT_EMAIL_REQUIRED = True  
+
+ACCOUNT_USERNAME_REQUIRED = True  
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  
+
+ACCOUNT_EMAIL_VERIFICATION = 'optional' 
+
+# Social providers settings 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': { 
+        'APP': { 
+            'client_id': 'tu-client-id-de-google', 
+            'secret': 'tu-secret-de-google', 
+            'key': '' 
+        }, 
+
+        'SCOPE': [ 
+            'profile', 
+            'email', 
+        ], 
+
+        'AUTH_PARAMS': { 
+            'access_type': 'online', 
+        } 
+    }, 
+
+    'facebook': { 
+        'APP': { 
+            'client_id': 'tu-client-id-de-facebook', 
+            'secret': 'tu-secret-de-facebook', 
+            'key': '' 
+        }, 
+
+        'METHOD': 'oauth2', 
+        'SCOPE': ['email', 'public_profile'], 
+        'VERIFIED_EMAIL': True, 
+    }
+}
