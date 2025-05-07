@@ -36,6 +36,8 @@ urlpatterns = [
     # Inclusión de URLs de aplicaciones
     path('accounts/', include('accounts.urls')),
     path('core/', include('core.urls')),
+
+    path('accounts/', include('allauth.urls')),  # URLs para allauth 
 ]
 
 # Servir archivos estáticos y media en desarrollo
