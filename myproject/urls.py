@@ -29,9 +29,6 @@ urlpatterns = [
     # Vista principal protegida
     path('', login_required(home), name='home'),
 
-    # URLs de autenticación
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
 
     # Inclusión de URLs de aplicaciones
     path('accounts/', include('accounts.urls')),

@@ -186,6 +186,10 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 ACCOUNT_EMAIL_VERIFICATION = 'optional' 
 
+#ACCOUNT_LOGIN_METHODS = {'username', 'email'} # se agrego por gpt
+#ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*'] # se agrego por gpt
+
+
 # Social providers settings 
 SOCIALACCOUNT_PROVIDERS = {
     'google': { 
