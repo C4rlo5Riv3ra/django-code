@@ -1,6 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% block title %}Iniciar Sesión -
 Sistema POS{% endblock %} {% block content %} {% load socialaccount %}
-
 <div class="row justify-content-center mt-5">
   <div class="col-md-6 col-lg-5">
     <div class="text-center mb-4">
@@ -25,7 +24,6 @@ Sistema POS{% endblock %} {% block content %} {% load socialaccount %}
 
         <form method="post" action="{% url 'login' %}">
           {% csrf_token %}
-
           <div class="mb-3">
             <label for="id_username" class="form-label"
               >Nombre de usuario</label
@@ -71,7 +69,6 @@ Sistema POS{% endblock %} {% block content %} {% load socialaccount %}
               <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
             </button>
           </div>
-
           <div class="text-center my-3">
             <p class="text-muted">O inicia sesión con</p>
             <div class="d-flex justify-content-center gap-2">
@@ -89,7 +86,6 @@ Sistema POS{% endblock %} {% block content %} {% load socialaccount %}
               </a>
             </div>
           </div>
-
           <input type="hidden" name="next" value="{{ next }}" />
         </form>
 
@@ -109,7 +105,6 @@ Sistema POS{% endblock %} {% block content %} {% load socialaccount %}
 {% endblock %} {% block extra_js %}
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // Animación simple para la tarjeta de login
     const loginCard = document.querySelector('.card')
     if (loginCard) {
       loginCard.style.opacity = '0'

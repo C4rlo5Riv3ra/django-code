@@ -1,21 +1,20 @@
 from django.db import models
 from myproject.choices import estadoEntidades, EstadoOrden
-from django.contrib.auth.hashers import make_password
 import uuid
+from django.contrib.auth.hashers import make_password
 
-# Create your models here.
 class GrupoArticulo(models.Model):
     grupo_id = models.UUIDField(primary_key=True)
-    codigo_grupo = models.CharField(max_length=10, null=False)
+    codigo_grupo = models.CharField(max_length=5, null=False)
     nombre_grupo = models.CharField(max_length=150, null=False)
-    estado =models.IntegerField(choices=estadoEntidades, default=estadoEntidades.ACTIVO)
+    estado = models.IntegerField(choices=estadoEntidades, default=estadoEntidades.ACTIVO)
 
     def __str__(self):
         return self.nombre_grupo
 
     class Meta:
-        db_table = 'grupo_articulo'
-        ordering = ['codigo_grupo']
+        db_table = "grupos_articulos"
+        ordering = ["codigo_grupo"]
 
 class LineaArticulo(models.Model):
     linea_id = models.UUIDField(primary_key=True)
@@ -28,39 +27,46 @@ class LineaArticulo(models.Model):
         return self.nombre_linea
 
     class Meta:
-        db_table = 'linea_articulo'
-        ordering = ['codigo_linea']
+        db_table = "lineas_articulos"
+        ordering = ["codigo_linea"]
 
 class Articulo(models.Model):
     articulo_id = models.UUIDField(primary_key=True)
-    codigo_articulo = models.CharField(max_length=25, null=False)
-    codigo_barras = models.CharField(max_length=250, null=True)
-    descripcion = models.CharField(max_length=500, null=False)
-    presentacion = models.CharField(max_length=500, null=True)
-    grupo = models.ForeignKey(GrupoArticulo, on_delete=models.RESTRICT, null=False, related_name='articulo_grupo')
-    linea = models.ForeignKey(LineaArticulo, on_delete=models.RESTRICT, null=False, related_name='articulo_linea')
-    stock = models.DecimalField(max_digits=10, decimal_places=2, null=False)
-    
+    codigo_articulo = models.CharField(max_length=200)
+    codigo_barras = models.CharField(max_length=200, null=True, blank=True)
+    descripcion = models.CharField(max_length=150)
+    presentacion = models.CharField(max_length=100, null=True)
+    grupo = models.ForeignKey(GrupoArticulo, on_delete=models.RESTRICT)
+    linea = models.ForeignKey(LineaArticulo, on_delete=models.RESTRICT)
+    stock = models.DecimalField(max_digits=12, decimal_places=2)
+
+    def __str__(self):
+        return self.descripcion
+
     class Meta:
-        db_table = 'articulo'
-        ordering = ['articulo_id']
+        db_table = "articulos"
 
 class ListaPrecio(models.Model):
-    articulo_id = models.ForeignKey(Articulo, on_delete=models.RESTRICT, null=False, related_name='lista_articulo')
-    precio_1 = models.DecimalField(max_digits=10, decimal_places=2, null=False)
-    precio_2 = models.DecimalField(max_digits=10, decimal_places=2, null=False)
-    precio_3 = models.DecimalField(max_digits=10, decimal_places=2, null=False)
-    precio_4 = models.DecimalField(max_digits=10, decimal_places=2, null=False)
-    precio_compra = models.DecimalField(max_digits=10, decimal_places=2, null=False)
-    precio_costo = models.DecimalField(max_digits=10, decimal_places=2, null=False)
+    articulo = models.UUIDField(primary_key=True)
+    precio_1 = models.DecimalField(max_digits=12, decimal_places=2)
+    precio_2 = models.DecimalField(max_digits=12, decimal_places=2)
+    precio_3 = models.DecimalField(max_digits=12, decimal_places=2)
+    precio_4 = models.DecimalField(max_digits=12, decimal_places=2)
+    precio_compra = models.DecimalField(max_digits=12, decimal_places=2)
+    precio_costo = models.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
-        db_table = 'lista_precio'
-        ordering = ['articulo_id']
+        db_table = "lista_precios"
+
+    def __str__(self):
+        return self.articulo.descripcion
 
 class CanalCliente(models.Model):
     canal_id = models.UUIDField(primary_key=True)
     nombre_canal = models.CharField(max_length=100, null=False)
+
+    def __str__(self):
+        return self.nombre_canal
 
     class Meta:
         db_table = 'canal_cliente'
@@ -79,52 +85,24 @@ class TipoIdentificacion(models.Model):
         db_table = "tipo_identificacion"
         ordering = ["tipo_id"]
 
-class Cliente(models.Model):
-    cliente_id = models.UUIDField(primary_key=True)
-    nro_identificacion =  models.CharField(max_length=12, null=False)
-    tipo_id = models.ForeignKey(TipoIdentificacion, on_delete=models.RESTRICT, null=False, related_name='clientes', db_column='tipo_id')
-    nombres = models.CharField(max_length=150, null=False)
-    direccion = models.CharField(max_length=150, null=False)
-    correo_electronico = models.CharField(max_length=255, null=False)
-    nro_movil = models.CharField(max_length=15, null=False)
-    estado = models.IntegerField(choices=estadoEntidades, default=estadoEntidades.ACTIVO)
-    canal_id = models.ForeignKey(CanalCliente, on_delete=models.RESTRICT, null=False, related_name='cliente_canal', db_column='canal_id')
-
-    class Meta:
-        db_table = 'cliente'
-        ordering = ['cliente_id']
-
-
-class Pedido(models.Model):
-    pedido_id = models.UUIDField(primary_key=True)
-    nro_pedido = models.IntegerField(null=False)
-    cliente_id = models.ForeignKey(Cliente, on_delete=models.RESTRICT, null=False, related_name='cliente_pedido', db_column='cliente_id')
-    importe = models.DecimalField(max_digits=12, decimal_places=2, null=False)
-    estado = models.IntegerField(choices=estadoEntidades, default=estadoEntidades.ACTIVO)
-
-    class Meta:
-        db_table = 'pedido'
-        ordering = ['pedido_id']
-
+# --- Usuarios y personas ---
 
 class Usuario(models.Model):
     usuario_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre_usuario = models.CharField(max_length=150, null=False)
     correo = models.EmailField(max_length=255, unique=True, null=False)
-    contrasena = models.CharField(max_length=128, null=False)  # Reemplazable con hashed password si se usa Django auth
+    contrasena = models.CharField(max_length=128, null=False)
     estado = models.IntegerField(choices=estadoEntidades, default=estadoEntidades.ACTIVO)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        # Hash de la contraseña solo si no está hasheada
-        if not self.password.startswith('pbkdf2_'):
-            self.password = make_password(self.contrasena)
+        if not self.contrasena.startswith('pbkdf2_'):
+            self.contrasena = make_password(self.contrasena)
         super().save(*args, **kwargs)
 
     class Meta:
         db_table = "usuario"
         ordering = ["usuario_id"]
-
 
 class Vendedor(models.Model):
     vendedor_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -143,10 +121,43 @@ class Vendedor(models.Model):
         db_table = "vendedor"
         ordering = ["vendedor_id"]
 
+class Cliente(models.Model):
+    cliente_id = models.UUIDField(primary_key=True)
+    tipo_id = models.ForeignKey(TipoIdentificacion, on_delete=models.RESTRICT, null=False, related_name='clientes', db_column='tipo_id')
+    nro_identificacion = models.CharField(max_length=12, null=False)
+    nombres = models.CharField(max_length=150, null=False)
+    direccion = models.CharField(max_length=150, null=False)
+    correo_electronico = models.CharField(max_length=255, null=False)
+    nro_movil = models.CharField(max_length=15, null=False)
+    estado = models.IntegerField(choices=estadoEntidades, default=estadoEntidades.ACTIVO)
+    canal_id = models.ForeignKey(CanalCliente, on_delete=models.RESTRICT, null=False, related_name='cliente_canal', db_column='canal_id')
+
+    def __str__(self):
+        return self.nombres
+
+    class Meta:
+        db_table = 'cliente'
+        ordering = ['cliente_id']
+
+# --- Pedidos ---
+
+class Pedido(models.Model):
+    pedido_id = models.UUIDField(primary_key=True)
+    nro_pedido = models.IntegerField(null=False)
+    cliente_id = models.ForeignKey(Cliente, on_delete=models.RESTRICT, null=False, related_name='cliente_pedido', db_column='cliente_id')
+    importe = models.DecimalField(max_digits=12, decimal_places=2, null=False)
+    estado = models.IntegerField(choices=estadoEntidades, default=estadoEntidades.ACTIVO)
+
+    def __str__(self):
+        return f"Pedido #{self.nro_pedido}"
+
+    class Meta:
+        db_table = 'pedido'
+        ordering = ['pedido_id']
 
 class ItemPedido(models.Model):
     item_id = models.UUIDField(primary_key=True)
-    pedido_id = models.ForeignKey(Pedido, on_delete=models.RESTRICT, null=False, related_name='itemp_pedido',db_column='pedido_id')
+    pedido_id = models.ForeignKey(Pedido, on_delete=models.RESTRICT, null=False, related_name='itemp_pedido', db_column='pedido_id')
     articulo_id = models.ForeignKey(Articulo, on_delete=models.RESTRICT, null=False, related_name='itemp_articulo', db_column='articulo_id')
     cantidad = models.IntegerField(null=False)
     precio_unitario = models.DecimalField(max_digits=12, decimal_places=2, null=False)
@@ -182,7 +193,6 @@ class OrdenCompraCliente(models.Model):
         db_table = "ordenes_compra_cliente"
         ordering = ["-fecha_creacion"]
 
-
 class ItemOrdenCompraCliente(models.Model):
     item_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pedido = models.ForeignKey(OrdenCompraCliente, on_delete=models.CASCADE, null=False, related_name='items_orden_compra')
@@ -217,3 +227,4 @@ class ItemOrdenCompraCliente(models.Model):
 
     class Meta:
         db_table = "items_ordenes_compra_cliente"
+
