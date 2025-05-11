@@ -19,21 +19,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
-
+#from accounts.views import login_view, logout_view
 from core.views import home
-from accounts.views import login_view, logout_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     # Vista principal protegida
     path('', login_required(home), name='home'),
-
-
     # Inclusión de URLs de aplicaciones
     path('accounts/', include('accounts.urls')),
     path('core/', include('core.urls')),
-
     path('accounts/', include('allauth.urls')),  # URLs para allauth 
 ]
 

@@ -86,8 +86,8 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dbpedidos',
-        'USER': 'admin_pedidos',
+        'NAME': 'pedidos',
+        'USER': 'adminpedidos',
         'PASSWORD': '12345678',
         'HOST': '127.0.0.1',
         'PORT': '5432',
@@ -160,10 +160,10 @@ SESSION_COOKIE_SECURE = False  # Cambiar a True en producción con HTTPS
 SESSION_ENGINE = 'django.contrib.sessions.backends.db' # Almacenar en la base de datos
 
 AUTHENTICATION_BACKENDS = [ 
-    # Needed to login by username in Django admin 
-    'django.contrib.auth.backends.ModelBackend', 
     # `allauth` specific authentication methods 
     'allauth.account.auth_backends.AuthenticationBackend', 
+    # Needed to login by username in Django admin 
+    'django.contrib.auth.backends.ModelBackend', 
 ] 
 
 SITE_ID = 1 
@@ -186,9 +186,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 ACCOUNT_EMAIL_VERIFICATION = 'optional' 
 
-#ACCOUNT_LOGIN_METHODS = {'username', 'email'} # se agrego por gpt
-#ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*'] # se agrego por gpt
-
+# ACCOUNT_LOGIN_METHODS = {'username', 'email'} # se agrego por gpt
+# ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*'] # se agrego por gpt # Asegúrate de que está correctamente configurado
 
 # Social providers settings 
 SOCIALACCOUNT_PROVIDERS = {
