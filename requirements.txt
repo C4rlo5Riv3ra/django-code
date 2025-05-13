@@ -1,0 +1,10 @@
+django
+psycopg2-binary
+mysqlclient
+django-allauth
+jwt
+requests
+djangorestframework
+markdown
+django-filter
+djangorestframework-simplejwt
