@@ -29,7 +29,9 @@ urlpatterns = [
     # Inclusión de URLs de aplicaciones
     path('accounts/', include('accounts.urls')),
     path('core/', include('core.urls')),
-    path('accounts/', include('allauth.urls')),  # URLs para allauth 
+    path('accounts/', include('allauth.urls')),  # URLs para allauth
+
+    path('api/', include('api.urls')), 
 ]
 
 # Servir archivos estáticos y media en desarrollo
